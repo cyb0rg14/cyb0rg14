@@ -1,0 +1,199 @@
+set previewer ~/.config/lf/lf_kitty_preview
+set cleaner ~/.config/lf/lf_kitty_clean
+
+# Basic Settings
+set hidden true
+set ignorecase true
+set icons true
+
+# Custom Functions
+cmd open ${{
+    case $(file --mime-type "$fx" -bL) in
+        text/*|application/json) $EDITOR "$fx";;
+        audio/*) clear && mpv --no-video "$fx";;
+        video/*|image/gif) clear && mpv "$fx";;
+        image/*) clear && imv "$fx";;
+        application/pdf) clear && zathura "$fx";;
+        *) xdg-open "$fx" ;;
+    esac
+}}
+
+cmd mkdir ${{
+  clear; set -f 
+  printf "Directory Name: "
+  read fx
+  mkdir $fx
+}}
+
+cmd mkfile ${{
+  clear; set -f 
+  printf "File Name: "
+  read fx
+  touch $fx
+}}
+
+cmd handlechmod ${{
+  clear; set -f 
+  IFS=$'\n'
+  file_count=$(echo "$fx" | wc -w)
+  if [ $file_count -eq 1 ]; then
+    file=$fx
+    if [ -f "$file" ]; then
+      file_name=$(basename "$file")
+      if [ -x "$file" ]; then
+        printf "$file_name is already executable. remove execute permission?[y/n] "
+        read ans
+        [ -z $ans ] && ans="y"
+        if [ $ans = "y" ]; then
+          chmod -x "$file"
+        fi
+      else
+        printf "$file_name is not executable. add execute permission?[y/n] "
+        read ans
+        [ -z $ans ] && ans="y"
+        if [ $ans = "y" ]; then
+          chmod +x "$file"
+        fi
+      fi
+      lf -remote 'send reload'
+    else
+      echo "file not found: $file"
+    fi
+  else
+    printf "do you want to make the selected files vice versa of their current executable status? [y/n] "
+    read ans
+    [ -z $ans ] && ans="y"
+    [ $ans = "y" ] && {
+      for file in $fx; do
+        if [ -f "$file" ]; then
+          if [ -x "$file" ]; then
+            chmod -x "$file"
+          else
+            chmod +x "$file"
+          fi
+        lf -remote 'send reload'
+        else
+          echo "file not found: $file"
+        fi
+      done
+    }
+  fi
+}}
+
+cmd docsendwithtgcli ${{
+  clear; set -f 
+  doc="$fx"
+  type=$(mimetype "$doc" | cut -d ":" -f 2 | cut -d "/" -f 2)
+  [ "$type" == "directory" ] && type="folder" || type="file"
+  printf "%s\n\t" "$doc"
+  printf "confirm to send $type?[y/n] "
+  read ans
+  [ -z $ans ] && ans="n"
+  [ $ans = "y" ] && setsid -f tg-cli -f "$doc" >/dev/null 2>&1 &
+}}
+
+cmd messagesendwithtgcli ${{
+  clear; set -f 
+  printf "%s\n\t" "Type your message to send otherwise type (q) for quit: "
+  read ans
+  [ $ans != "q" ] && setsid -f tg-cli -m "$ans"  >dev/null 2>&1 &|| echo "quit"
+}}
+
+cmd delete ${{
+  clear; set -f 
+  file="$fx"
+	printf "%s\n\t" $file 
+	printf "delete?[y/n] "
+	read ans
+  [ -z $ans ] && ans="n"
+	[ $ans = "y" ] && rm -rf $file
+}}
+
+cmd setwallpaper ${{
+   file="$fx"
+   cp -r "$file" ~/.config/wall.jpg
+   swww img "$file" --transition-fps 30 --transition-type any --transition-duration 3
+}}
+
+# Archive bindings
+cmd unarchive ${{
+  clear; set -f 
+  case $f in
+    *.tar.bz|*.tar.bz2|*.tbz|*.tbz2) tar xjvf $f;;
+    *.tar.gz|*.tgz) tar xzvf $f;;
+    *.tar.xz|*.txz) tar xJvf $f;;
+    *.tar) tar xvf $f;;
+    *.zip) unzip $f;;
+    *.rar) unrar x $f;;
+    *.7z) 7z x $f;;
+    *) echo "Unsupported format";;
+  esac
+}}
+
+# Trash bindings
+cmd trash ${{
+  files=$(printf "$fx" | tr '\n' ';')
+  while [ "$files" ]; do
+    file=${files%%;*}
+
+    trash-put "$(basename "$file")"
+    if [ "$files" = "$file" ]; then
+      files=''
+    else
+      files="${files#*;}"
+    fi
+  done
+}}
+
+cmd restore_trash ${{
+  trash-restore
+}}
+
+cmd select-all :unselect; invert
+
+cmd clear-output ${{
+  clear
+}}
+
+# Bindings
+map d
+map m
+map t
+map c
+map q
+map f
+#map v
+#map <space>
+map . mark-save
+map mr mark-remove
+
+# Basic Functions
+map U unarchive
+map P handlechmod
+map H set hidden!
+map dt trash
+map dr restore_trash
+map dp delete
+map p paste
+map x cut
+map y copy
+map <enter> open
+map mf mkfile
+map md mkdir
+map fs docsendwithtgcli
+map ms messagesendwithtgcli
+map bg setwallpaper
+map A select-all
+map C clear
+map R reload
+map q :quit; clear-output
+
+# Movement
+map gd cd ~/Documents
+map gD cd ~/Downloads
+map gp cd ~/Pictures
+map gm cd ~/Music
+map gv cd ~/Videos
+map gc cd ~/.config
+map gb cd ~/.local/bin
+map gt cd ~/.local/share/Trash/files

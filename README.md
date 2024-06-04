@@ -17,36 +17,26 @@ Hi, Cyborg's here!
 
 - 📫 You can reach out to me at **cyborgdomain@proton.me**
 
-
-<!-- 
-<div id="header" align="center">
-  <img src="https://komarev.com/ghpvc/?username=cyb0rg14&style=for-the-badge&color=orange" alt=""/>
-</div> 
--->
-
-<!--  
-<p align="center">
- <img width="1000" src="https://raw.githubusercontent.com/sammorozov/sammorozov/main/assets/github-snake.svg" alt="snake"/>
-</p>
--->
-
 ## Languages
 
 <p>
     <a target="_blank">
-        <img alt="Python" src="https://img.shields.io/badge/Python-%2312100E.svg?logo=python&style=for-the-badge&logoColor=yellow"/>
+        <img alt="Python" src="https://img.shields.io/badge/Python-%2312100E.svg?logo=python&style=for-the-badge&logoColor=green"/>
     </a>
     <a target="_blank">
-        <img alt="SQL" src="https://img.shields.io/badge/SQL-%2312100E.svg?style=for-the-badge&logo=mysql&logoColor=white"/>
+        <img alt="Cpp" src="https://img.shields.io/badge/C++-%2312100E.svg?&logo=cplusplus&style=for-the-badge&logoColor=00599C"/>
+    </a>
+    <a target="_blank">
+        <img alt="Rust" src="https://img.shields.io/badge/Rust-%2312100E.svg?&logo=rust&style=for-the-badge&logoColor=red"/>
+    </a>
+    <a target="_blank">
+        <img alt="Golang" src="https://img.shields.io/badge/Go-%2312100E.svg?&logo=go&style=for-the-badge&logoColor=19acbf"/>
     </a>
     <a target="_blank">
         <img alt="Bash" src="https://img.shields.io/badge/Bash-%2312100E.svg?logo=gnu-bash&logoColor=white&style=for-the-badge"/>
     </a>
     <a target="_blank">
-        <img alt="Cpp" src="https://img.shields.io/badge/C++-%2312100E.svg?&logo=cplusplus&style=for-the-badge&logoColor=00599C"/>
-    </a>
-        <a target="_blank">
-        <img alt="Rust" src="https://img.shields.io/badge/Rust-%2312100E.svg?&logo=rust&style=for-the-badge&logoColor=00599C"/>
+        <img alt="SQL" src="https://img.shields.io/badge/SQL-%2312100E.svg?style=for-the-badge&logo=mysql&logoColor=white"/>
     </a>
 </p>
 
